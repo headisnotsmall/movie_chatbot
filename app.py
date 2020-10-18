@@ -41,8 +41,6 @@ def callback():
 
     return 'OK'
 
-# 兩人同時使用bot的問題
-
 # 歡迎訊息
 
 
@@ -109,9 +107,9 @@ def handle_ranking_system(event):
     line_bot_api.reply_message(event.reply_token, buttons_template_message)
     return
 
-# 詢問經驗
+# 
 
-# 圖文選單
+# 圖文選單 
 
 
 if __name__ == "__main__":
