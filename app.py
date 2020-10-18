@@ -48,7 +48,6 @@ def callback():
 
 @handler.add(FollowEvent)
 def handle_follow(event):
-    global _id
     user_profile = line_bot_api.get_profile(event.source.user_id)
     with open("namelist.txt", "a") as myfile:
         myfile.write(
@@ -99,7 +98,7 @@ def handle_ranking_system(event):
                     data='PTT,'
                 ),
                 PostbackAction(
-                    label='全部評分',
+                    label='或查詢以上所有評分',
                     display_text='我想看所有評分',
                     data='ALL,'
                 )
