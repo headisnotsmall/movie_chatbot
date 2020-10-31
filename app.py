@@ -14,6 +14,7 @@ from linebot.models import (
 import json
 import csv
 import os
+import psycopg2
 
 app = Flask(__name__)
 
@@ -70,6 +71,64 @@ def handle_follow(event):
     # 輸入電影名稱
 
 @handler.add(MessageEvent, message=TextMessage)
+def handler_ranking_system(event):
+
+    host = "localhost"
+    dbname = "imdb_movies"
+    user = "postgres"
+    password = "L25027"
+
+    # Construct connection string
+    conn_string = "host={0} user={1} dbname={2} password={3}".format(host, user, dbname, password)
+    conn = psycopg2.connect(conn_string) 
+    print("Connection established")
+
+    cursor = conn.cursor()
+
+    sql = '''
+    SELECT original_title, title_tw, year, director, name, avg_vote FROM public.movies
+    JOIN casts on movies.imdb_title_id = casts.imdb_title_id
+    JOIN names on casts.imdb_name_id = names.imdb_name_id
+    LEFT JOIN movies_tw on movies.imdb_title_id = movies_tw.imdb_title_id
+    WHERE votes > 5000 and ordering = 1 and title_tw is not null
+    ORDER BY avg_vote DESC
+    '''
+
+    # Fetch all rows from table
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+
+    # Print all rows
+
+    searching_name = str(event.message.text)
+    ranking_message_concate = ""
+    for row in rows:
+        if searching_name.lower() in row[0].lower() or searching_name in row[1]: # .lower() to fix capital issue
+            ranking_message = (
+                '片名: '+ row[0]+ '\n'
+                '中文: '+ row[1]+ '\n'
+                '年份: '+ str(row[2])+ '\n'
+                '導演: '+ row[3]+ '\n'
+                '主演: '+ row[4]+ '\n'
+                '評分: '+ str(row[5])+ '\n'
+                '---------------------'  '\n'
+            )
+            ranking_message_concate = ranking_message_concate + ranking_message
+    if ranking_message_concate == "":
+        ranking_message_concate = "查無資料"
+    # Clean up
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    ranking_send_message = TextSendMessage(ranking_message_concate)
+    line_bot_api.reply_message(event.reply_token, ranking_send_message)
+    
+    return
+
+'''
+
+@handler.add(MessageEvent, message=TextMessage)
 def handle_ranking_system(event):    
     # 想查詢的系統
 
@@ -107,7 +166,7 @@ def handle_ranking_system(event):
     line_bot_api.reply_message(event.reply_token, buttons_template_message)
     return
 
-# 
+'''
 
 # 圖文選單 
 
