@@ -42,7 +42,7 @@ def callback():
 
     return 'OK'
 
-# 歡迎訊息
+# welcome message
 
 
 @handler.add(FollowEvent)
@@ -60,15 +60,13 @@ def handle_follow(event):
     follow_text_send_message = TextSendMessage(
         "Hello,\n" 
         "歡迎使用電影評分查詢\n"
-        "目前資料庫建置中\n"
-        "請耐心等候\n\n"
         "請輸入你要查詢的電影"
     )
 
     line_bot_api.reply_message(event.reply_token, follow_text_send_message)
     return
 
-    # 輸入電影名稱
+# insert movie title
 
 @handler.add(MessageEvent, message=TextMessage)
 def handler_ranking_system(event):
@@ -76,7 +74,7 @@ def handler_ranking_system(event):
     host = "localhost"
     dbname = "imdb_movies"
     user = "postgres"
-    password = "L25027"
+    password = "L25027" # pLMZF4hvR7TGBhz
 
     # Construct connection string
     conn_string = "host={0} user={1} dbname={2} password={3}".format(host, user, dbname, password)
@@ -87,14 +85,15 @@ def handler_ranking_system(event):
 
     sql = '''
     SELECT original_title, title_tw, year, director, name, avg_vote FROM public.movies
-    JOIN casts on movies.imdb_title_id = casts.imdb_title_id
-    JOIN names on casts.imdb_name_id = names.imdb_name_id
-    LEFT JOIN movies_tw on movies.imdb_title_id = movies_tw.imdb_title_id
+    JOIN public.casts on public.movies.imdb_title_id = public.casts.imdb_title_id
+    JOIN public.names on public.casts.imdb_name_id = public.names.imdb_name_id
+    LEFT JOIN public.movies_tw on public.movies.imdb_title_id = public.movies_tw.imdb_title_id
     WHERE votes > 5000 and ordering = 1 and title_tw is not null
     ORDER BY avg_vote DESC
     '''
 
     # Fetch all rows from table
+
     cursor.execute(sql)
     rows = cursor.fetchall()
 

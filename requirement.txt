@@ -1,5 +1,3 @@
 line-bot-sdk
 flask
-boto3
-matplotlib
-csv
+psycopg2
