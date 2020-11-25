@@ -52,3 +52,14 @@ INSERT INTO movies VALUES
 (24483,'tt0097049','Chastnyy detektiv, ili operatsiya ''Kooperatsiya''','Chastnyy detektiv, ili operatsiya ''Kooperatsiya''',1990,94,'Leonid Gaidai',5.3,441),
 (30614,'tt0119207','God Said, ''Ha!''','God Said, ''Ha!''',1998,85,'Julia Sweeney',7.1,926),
 (31587,'tt0123313','Voitheia o Vengos, faneros praktor ''000''','Voitheia o Vengos, faneros praktor ''000''',1967,89,'Thanasis Vengos',8.2,1267)
+
+
+COPY(
+SELECT original_title, title_tw, year, director, name, avg_vote FROM public.movies
+JOIN public.casts on public.movies.imdb_title_id = public.casts.imdb_title_id
+JOIN public.names on public.casts.imdb_name_id = public.names.imdb_name_id
+LEFT JOIN public.movies_tw on public.movies.imdb_title_id = public.movies_tw.imdb_title_id
+WHERE votes > 5000 and ordering = 1 and title_tw is not null
+ORDER BY avg_vote DESC
+)
+TO 'D:\myfile1.csv' DELIMITER ',' CSV HEADER;
