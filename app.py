@@ -72,7 +72,7 @@ def handle_follow(event):
 def handler_ranking_system(event):
 
     host = "localhost"
-    dbname = "imdb_movies"
+    dbname = "postgres"
     user = "postgres"
     password = "L25027" # pLMZF4hvR7TGBhz
 
@@ -100,20 +100,20 @@ def handler_ranking_system(event):
     # Print all rows
 
     searching_name = str(event.message.text)
-    ranking_message_concate = ""
+    ranking_message_concate = '以下為查詢結果' + '\n'
     for row in rows:
         if searching_name.lower() in row[0].lower() or searching_name in row[1]: # .lower() to fix capital issue
             ranking_message = (
+                '---------------------'  '\n'
                 '片名: '+ row[0]+ '\n'
                 '中文: '+ row[1]+ '\n'
                 '年份: '+ str(row[2])+ '\n'
                 '導演: '+ row[3]+ '\n'
                 '主演: '+ row[4]+ '\n'
                 '評分: '+ str(row[5])+ '\n'
-                '---------------------'  '\n'
             )
             ranking_message_concate = ranking_message_concate + ranking_message
-    if ranking_message_concate == "":
+    if ranking_message_concate == '以下為查詢結果' + '\n':
         ranking_message_concate = "查無資料"
     # Clean up
     conn.commit()
@@ -173,6 +173,5 @@ def handle_ranking_system(event):
 if __name__ == "__main__":
     app.run()
 
-# https://howimuchisthis.herokuapp.com
 # if __name__ == "__main__":
 #     app.run(host='0.0.0.0', port=os.environ['PORT'])
