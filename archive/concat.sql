@@ -8,12 +8,14 @@ WHERE votes > 5000 and ordering = 1 and title_tw is not null
 ORDER BY avg_vote DESC
 
 CREATE TABLE casts(
+	id integer,
 	imdb_title_id varchar(20),
 	ordering integer,
 	imdb_name_id varchar(20)
 );
 
 CREATE TABLE movies(
+	id integer,
 	imdb_title_id varchar(20),
 	title varchar(200),
 	original_title varchar(200),
@@ -24,12 +26,14 @@ CREATE TABLE movies(
 	votes integer
 );
 
-CREATE TABLE movie_tw(
+CREATE TABLE movies_tw(
+	id integer,
 	imdb_title_id varchar(20),
 	title_tw varchar(100)
 );
 
 CREATE TABLE names(
+	id integer,
 	imdb_name_id varchar(20),
 	name varchar(200)
 )

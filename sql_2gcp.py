@@ -1,7 +1,7 @@
 import psycopg2
 
 # Update connection string information 
-host = "35.236.128.194"
+host = "104.199.116.78"
 dbname = "imdb_movies"
 user = "postgres"
 password = "L25027"
@@ -13,56 +13,60 @@ print("Connection established")
 
 cursor = conn.cursor()
 
+cursor.execute(
+	'CREATE DATABASE imdb_movies'
+)
+
 # create tables
 
-cursor.execute(
-    '''
-    CREATE TABLE casts(
-	imdb_title_id varchar(20),
-	ordering integer,
-	imdb_name_id varchar(20)
-);
+# cursor.execute(
+#     '''
+#     CREATE TABLE casts(
+# 	imdb_title_id varchar(20),
+# 	ordering integer,
+# 	imdb_name_id varchar(20)
+# );
 
-CREATE TABLE movies(
-	imdb_title_id varchar(20),
-	title varchar(200),
-	original_title varchar(200),
-	year integer,
-	duration integer,
-	director varchar(100),
-	avg_vote real,
-	votes integer
-);
+# CREATE TABLE movies(
+# 	imdb_title_id varchar(20),
+# 	title varchar(200),
+# 	original_title varchar(200),
+# 	year integer,
+# 	duration integer,
+# 	director varchar(100),
+# 	avg_vote real,
+# 	votes integer
+# );
 
-CREATE TABLE movie_tw(
-	imdb_title_id varchar(20),
-	title_tw varchar(100)
-);
+# CREATE TABLE movie_tw(
+# 	imdb_title_id varchar(20),
+# 	title_tw varchar(100)
+# );
 
-CREATE TABLE names(
-	imdb_name_id varchar(20),
-	name varchar(200)
-)
-'''
-)
-print('Finished Creating tables')
-'''
+# CREATE TABLE names(
+# 	imdb_name_id varchar(20),
+# 	name varchar(200)
+# )
+# '''
+# )
+# print('Finished Creating tables')
+# '''
 
-# Drop previous table of same name if one exists
-cursor.execute("DROP TABLE IF EXISTS inventory;")
-print("Finished dropping table (if existed)")
+# # Drop previous table of same name if one exists
+# cursor.execute("DROP TABLE IF EXISTS inventory;")
+# print("Finished dropping table (if existed)")
 
-# Create a table
-cursor.execute("CREATE TABLE inventory (id serial PRIMARY KEY, name VARCHAR(50), quantity INTEGER);")
-print("Finished creating table")
+# # Create a table
+# cursor.execute("CREATE TABLE inventory (id serial PRIMARY KEY, name VARCHAR(50), quantity INTEGER);")
+# print("Finished creating table")
 
-# Insert some data into the table
-cursor.execute("INSERT INTO inventory (name, quantity) VALUES (%s, %s);", ("banana", 150))
-cursor.execute("INSERT INTO inventory (name, quantity) VALUES (%s, %s);", ("orange", 154))
-cursor.execute("INSERT INTO inventory (name, quantity) VALUES (%s, %s);", ("apple", 100))
-print("Inserted 3 rows of data")
+# # Insert some data into the table
+# cursor.execute("INSERT INTO inventory (name, quantity) VALUES (%s, %s);", ("banana", 150))
+# cursor.execute("INSERT INTO inventory (name, quantity) VALUES (%s, %s);", ("orange", 154))
+# cursor.execute("INSERT INTO inventory (name, quantity) VALUES (%s, %s);", ("apple", 100))
+# print("Inserted 3 rows of data")
 
-'''
+# '''
 
 # sql = '''
 # SELECT original_title, year, director, name, avg_vote FROM public.movies
